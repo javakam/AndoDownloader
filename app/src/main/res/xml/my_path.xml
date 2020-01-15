@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--        -->
+
+    <!--代表设备的根目录new File("/");-->
+    <root-path
+        name="root"
+        path="root" />
+
+    <!--context.getFilesDir()-->
+    <files-path
+        name="files"
+        path="files" />
+
+    <!--context.getCacheDir()-->
+    <cache-path
+        name="cache"
+        path="cache" />
+
+    <!--context.getExternalFilesDirs()-->
+    <external-files-path
+        name="name"
+        path="path" />
+
+    <!-- getExternalCacheDirs() 此标签需要 support 25.0.0以上才可以使用-->
+    <external-cache-path
+        name="name"
+        path="path" />
+
+    <!--   代表的目录即为：Environment.getExternalStorageDirectory()/Android/data/包名/-->
+    <!--   path="Android/data/包名/"  -->
+    <external-path
+        name="files_root"
+        path="Android/data/com.ando.download/" />
+
+    <!--  Environment.getExternalStorageDirectory() -->
+    <external-path
+        name="external_storage_root"
+        path="." />
+
+    <!--  代表的目录即为：Environment.getExternalStorageDirectory()/pics-->
+    <external-path
+        name="external"
+        path="pics" />
+
+</paths>
