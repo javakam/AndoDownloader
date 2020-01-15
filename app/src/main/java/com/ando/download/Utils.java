@@ -26,6 +26,7 @@ import androidx.core.content.FileProvider;
 
 public class Utils {
     public static final String PARENT_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/aatest";
+    public static final String PARENT_PATH2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/manytest";
 
     public static void launchOrInstallApp(Context context, String pkgName) {
         if (!TextUtils.isEmpty(pkgName)) {
@@ -60,15 +61,15 @@ public class Utils {
 
     public static OkDownload buildOkDownload(Context context) {
         return new OkDownload.Builder(context.getApplicationContext())
-            .downloadStore(Util.createDefaultDatabase(context)) //断点信息存储的位置，默认是SQLite数据库
-            .callbackDispatcher(new CallbackDispatcher()) //监听回调分发器，默认在主线程回调
-            .downloadDispatcher(new DownloadDispatcher()) //下载管理机制，最大下载任务数、同步异步执行下载任务的处理
-            .connectionFactory(Util.createDefaultConnectionFactory()) //选择网络请求框架，默认是OkHttp
-            .outputStreamFactory(new DownloadUriOutputStream.Factory()) //构建文件输出流DownloadOutputStream，是否支持随机位置写入
-            .processFileStrategy(new ProcessFileStrategy()) //多文件写文件的方式，默认是根据每个线程写文件的不同位置，支持同时写入
-            //.monitor(monitor); //下载状态监听
-            .downloadStrategy(new DownloadStrategy())//下载策略，文件分为几个线程下载
-            .build();
+                .downloadStore(Util.createDefaultDatabase(context)) //断点信息存储的位置，默认是SQLite数据库
+                .callbackDispatcher(new CallbackDispatcher()) //监听回调分发器，默认在主线程回调
+                .downloadDispatcher(new DownloadDispatcher()) //下载管理机制，最大下载任务数、同步异步执行下载任务的处理
+                .connectionFactory(Util.createDefaultConnectionFactory()) //选择网络请求框架，默认是OkHttp
+                .outputStreamFactory(new DownloadUriOutputStream.Factory()) //构建文件输出流DownloadOutputStream，是否支持随机位置写入
+                .processFileStrategy(new ProcessFileStrategy()) //多文件写文件的方式，默认是根据每个线程写文件的不同位置，支持同时写入
+                //.monitor(monitor); //下载状态监听
+                .downloadStrategy(new DownloadStrategy())//下载策略，文件分为几个线程下载
+                .build();
     }
 
     /**

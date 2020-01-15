@@ -2,6 +2,7 @@ package com.ando.download;
 
 import android.Manifest;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.ando.download.many.ManyTaskActivity;
 import com.liulishuo.okdownload.DownloadListener;
 import com.liulishuo.okdownload.DownloadTask;
 import com.liulishuo.okdownload.StatusUtil;
@@ -60,7 +62,9 @@ public class MainActivity extends ListActivity {
                 "查看任务2的状态",
                 "查看任务3的状态",
                 "查看任务4的状态",
-                "查看任务5的状态",};
+                "查看任务5的状态",
+
+                "ヾ(o◕∀◕)ﾉヾ 多任务下载 ヾ(o◕∀◕)ﾉヾ ",};
         setListAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, array));
         list = Arrays.asList(new ItemInfo(URL1, "com.ando.download"),
                 new ItemInfo(URL1, "哎"),
@@ -101,6 +105,9 @@ public class MainActivity extends ListActivity {
             case 5:
                 Utils.deleteFiles(new File(Utils.PARENT_PATH), null, false);
                 recreate();
+                break;
+            case 11:
+                startActivity(new Intent(this, ManyTaskActivity.class));
                 break;
             default:
                 ItemInfo itemInfo = list.get(position - 6);
