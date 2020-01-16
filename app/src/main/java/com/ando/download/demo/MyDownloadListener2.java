@@ -1,4 +1,4 @@
-package com.ando.download;
+package com.ando.download.demo;
 
 import android.widget.ProgressBar;
 
@@ -17,8 +17,8 @@ import androidx.annotation.NonNull;
  * @author Changbao
  * @date 2020/1/15  15:02
  */
-public class MyDownloadListener1 extends DownloadListener3 {
-    public MyDownloadListener1(ItemInfo itemInfo, ProgressBar progressBar) {
+public class MyDownloadListener2 extends DownloadListener3 {
+    public MyDownloadListener2(ItemInfo itemInfo, ProgressBar progressBar) {
 
     }
 

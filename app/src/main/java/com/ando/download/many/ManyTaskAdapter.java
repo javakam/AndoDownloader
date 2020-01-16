@@ -1,5 +1,6 @@
 package com.ando.download.many;
 
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,21 +23,27 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ManyTaskAdapter extends BaseQuickAdapter<DownloadTask, BaseViewHolder> {
 
-    public ManyTaskAdapter() {
-        super(R.layout.item_many_task);
-
+    private QueueController controller;
+    public ManyTaskAdapter( QueueController controller) {
+        super(R.layout.item_queue);
+        this.controller=controller;
     }
 
     @Override
     protected void convert(@NotNull BaseViewHolder holder, @Nullable DownloadTask bean) {
-        TextView tvInfo = holder.getView(R.id.tv_task_info);
-        TextView tvStart = holder.getView(R.id.tv_task_start);
-        ProgressBar progressBar = holder.getView(R.id.progress_bar_task);
-
+        Button itemAction = holder.getView(R.id.bt_down_action);
+        TextView nameTv = holder.getView(R.id.tv_down_name);
+        TextView statusTv = holder.getView(R.id.tv_down_status);
+        ProgressBar progressBar = holder.getView(R.id.progressbar_down);
 
     }
 
-//    private void download(int position) {
+    @Override
+    public int getItemCount() {
+        return controller.size();
+    }
+
+    //    private void download(int position) {
 //        DownloadTask task = getData().get(position);
 //        // 0：没有下载  1：下载中  2：暂停  3：完成
 //        if (itemInfo.status == 0) {

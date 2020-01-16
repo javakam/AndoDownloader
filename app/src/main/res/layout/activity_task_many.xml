@@ -4,17 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-    <TextView
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rb_serial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:checked="true"
+            android:gravity="center"
+            android:text="串行" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rb_parallel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="并行" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btn_delete_files"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="删除文件" />
+
+    <Button
         android:id="@+id/tv_tasks_start"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#625577"
+        android:layout_height="45dp"
         android:gravity="center"
-        android:text="全部开始下载"
-        android:textColor="@android:color/white"
-        android:textSize="14sp" />
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        tools:text="全部开始" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_tasks"

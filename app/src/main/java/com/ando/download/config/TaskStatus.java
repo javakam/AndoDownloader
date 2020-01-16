@@ -12,7 +12,18 @@ package com.ando.download.config;
 public enum TaskStatus {
 
     /**
+     * <pre>
+     *     com.liulishuo.okdownload.StatusUtil.Status
      *
+     *     public enum Status {
+     *         PENDING,
+     *         RUNNING,
+     *         COMPLETED,
+     *         IDLE,
+     *         // may completed, but no filename can't ensure.
+     *         UNKNOWN
+     *     }
+     * </pre>
      */
     IDLE(0, "未下载"),
     DOING(1, "下载中"),

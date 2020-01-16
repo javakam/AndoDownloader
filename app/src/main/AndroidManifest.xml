@@ -29,8 +29,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".demo.DemoActivity"
+           />
+
+        <activity
             android:name=".many.ManyTaskActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <provider
             android:name=".MyFileProvider"

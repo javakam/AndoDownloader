@@ -2,18 +2,24 @@ package com.ando.download.many;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 
 import com.ando.download.R;
-import com.ando.download.Utils;
 import com.ando.download.config.TaskParam;
+import com.ando.download.config.TempData;
+import com.ando.download.demo.Utils;
+import com.liulishuo.okdownload.DownloadContext;
+import com.liulishuo.okdownload.DownloadContextListener;
 import com.liulishuo.okdownload.DownloadTask;
 import com.liulishuo.okdownload.OkDownload;
+import com.liulishuo.okdownload.core.cause.EndCause;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -32,11 +38,14 @@ public class ManyTaskActivity extends AppCompatActivity {
 
     private static final String URL1 = "https://dldir1.qq.com/foxmail/work_weixin/wxwork_android_2.4.5.5571_100001.apk";
 
-    private TextView mTvTasksStart;
     private RecyclerView mRvTasks;
     private ManyTaskAdapter mAdapter;
 
     private List<TaskParam> mData;
+    private Button mBtnDelete;
+    private Button mTvAction;
+
+    private QueueController controller;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,22 +54,102 @@ public class ManyTaskActivity extends AppCompatActivity {
         new File(Utils.PARENT_PATH2).mkdirs();
 
         setContentView(R.layout.activity_task_many);
-        mTvTasksStart = findViewById(R.id.tv_tasks_start);
+
+        mBtnDelete = findViewById(R.id.btn_delete_files);
+        mTvAction = findViewById(R.id.tv_tasks_start);
         mRvTasks = findViewById(R.id.rv_tasks);
-        mRvTasks.setItemAnimator(null);
-        mRvTasks.setHasFixedSize(true);
-        mAdapter = new ManyTaskAdapter();
-        mRvTasks.setAdapter(mAdapter);
 
         initData();
+        initRecyclerView();
+        initAction();
 
     }
+
 
     private void initData() {
         mData = new ArrayList<>();
+        controller = new QueueController();
+        controller.initTasks(TempData.getTaskBeans(), this, new DownloadContextListener() {
+            @Override
+            public void taskEnd(@NonNull DownloadContext context, @NonNull DownloadTask task, @NonNull EndCause cause, @Nullable Exception realCause, int remainCount) {
+
+                mTvAction.setText(R.string.start);
+                // to cancel
+                controller.stop();
+
+                mBtnDelete.setEnabled(false);
+
+                if (mAdapter != null) {
+                    mAdapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void queueEnd(@NonNull DownloadContext context) {
+
+            }
+        });
 
     }
 
+    private void initRecyclerView() {
+        mRvTasks.setItemAnimator(null);
+        mRvTasks.setHasFixedSize(true);
+        mAdapter = new ManyTaskAdapter(controller);
+        mRvTasks.setAdapter(mAdapter);
+    }
+
+
+    private void initAction() {
+        mBtnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (controller != null) {
+                    controller.deleteFiles();
+                }
+                if (mAdapter != null) {
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+
+        mTvAction.setText(R.string.start);
+
+        //全部开始,全部暂停
+        mTvAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final boolean started = (v.getTag() != null);
+                if (started) {
+                    if (controller != null) {
+                        controller.stop();
+                    }
+                } else {
+                    v.setTag(true);
+
+                    mTvAction.setText(R.string.cancel);
+
+                    // to start
+                    if (controller != null) {
+                        controller.start(false);
+                    }
+                    if (mAdapter != null) {
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                    mBtnDelete.setEnabled(false);
+
+
+                }
+            }
+        });
+    }
+
+    /**
+     * 创建单下载任务
+     */
     private DownloadTask createDownloadTask(TaskParam taskParam) {
         return new DownloadTask.Builder(taskParam.getUrl(), new File(Utils.PARENT_PATH)) //设置下载地址和下载目录，这两个是必须的参数
                 .setFilename(taskParam.getPkgName())//设置下载文件名，没提供的话先看 response header ，再看 url path(即启用下面那项配置)
@@ -101,6 +190,63 @@ public class ManyTaskActivity extends AppCompatActivity {
 //                task.cancel();
 //            }
 //        }
+
+    }
+
+    private void downloadDemoOriginal() {
+
+
+//        DownloadTask.Builder    task = new DownloadTask.Builder(url, parentFile)
+//                .setFilename(filename)
+//                // the minimal interval millisecond for callback progress
+//                .setMinIntervalMillisCallbackProcess(30)
+//                // do re-download even if the task has already been completed in the past.
+//                .setPassIfAlreadyCompleted(false)
+//                .build();
+//
+//        task.enqueue(listener);
+//        task.cancel();
+//        // execute task synchronized
+//        task.execute(listener);
+//
+//        // 此方法专门针对一堆任务进行了优化
+//        DownloadTask.enqueue(tasks, listener);
+//        // 取消，此方法也专门针对一堆任务进行优化
+//        DownloadTask.cancel(tasks);
+
+//
+//        DownloadContext.Builder builder = new DownloadContext.QueueSet()
+//                .setParentPathFile(parentFile)
+//                .setMinIntervalMillisCallbackProcess(150)
+//                .commit();
+//        builder.bind(url1);
+//        builder.bind(url2).addTag(key, value);
+//        builder.bind(url3).setTag(tag);
+//        builder.setListener(contextListener);
+//
+//        DownloadTask task = new DownloadTask.Builder(url4, parentFile)
+//                .setPriority(10).build();
+//        builder.bindSetTask(task);
+//
+//        DownloadContext context = builder.build();
+//        context.startOnParallel(listener);
+//        // stop
+//        context.stop();
+
+
+//        StatusUtil.Status status = StatusUtil.getStatus(task);
+//        status = StatusUtil.getStatus(url, parentPath, null);
+//        status = StatusUtil.getStatus(url, parentPath, filename);
+//
+//        boolean isCompleted = StatusUtil.isCompleted(task);
+//        isCompleted = StatusUtil.isCompleted(url, parentPath, null);
+//        isCompleted = StatusUtil.isCompleted(url, parentPath, filename);
+//
+//        StatusUtil.Status completedOrUnknown = StatusUtil.isCompletedOrUnknown(task);
+//
+//        // If you set tag, so just get tag
+//        task.getTag();
+//        task.getTag(xxx);
 
     }
 }

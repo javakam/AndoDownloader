@@ -1,4 +1,4 @@
-package com.ando.download;
+package com.ando.download.demo;
 
 /**
  * Title: ItemInfo

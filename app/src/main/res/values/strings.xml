@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">AndoDownloader</string>
+    <string name="app_name">BetDownloader</string>
+
+
+    <string name="start">开始</string>
+    <string name="cancel">取消</string>
+    <string name="parallel">Parallel</string>
+    <string name="serial">Serial</string>
+    <string name="priority">Priority(%1$d)</string>
+    <string name="state_idle">空闲</string>
+    <string name="state_pending">准备中</string>
+    <string name="state_unknown">未知</string>
+    <string name="state_running">下载中</string>
+
 </resources>

@@ -1,8 +1,6 @@
-package com.ando.download;
+package com.ando.download.many;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.ProgressBar;
 
 import com.liulishuo.okdownload.DownloadTask;
 import com.liulishuo.okdownload.SpeedCalculator;
@@ -19,18 +17,19 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class MyDownloadListener4WithSpeed extends DownloadListener4WithSpeed {
-    private ItemInfo itemInfo;
+/**
+ * Title: CustomDownloadListener4WithSpeed
+ * <p>
+ * Description:
+ * </p>
+ *
+ * @author Changbao
+ * @date 2020/1/16  15:22
+ */
+public class CustomDownloadListener4WithSpeed extends DownloadListener4WithSpeed {
+
     private long totalLength;
     private String readableTotalLength;
-    private ProgressBar progressBar;//谨防内存泄漏
-    private Context context;//谨防内存泄漏
-
-    public MyDownloadListener4WithSpeed(ItemInfo itemInfo, ProgressBar progressBar) {
-        this.itemInfo = itemInfo;
-        this.progressBar = progressBar;
-        context = progressBar.getContext();
-    }
 
     @Override
     public void taskStart(@NonNull DownloadTask task) {
@@ -42,7 +41,6 @@ public class MyDownloadListener4WithSpeed extends DownloadListener4WithSpeed {
         totalLength = info.getTotalLength();
         readableTotalLength = Util.humanReadableBytes(totalLength, true);
         Log.i("123", "【2、infoReady】当前进度" + (float) info.getTotalOffset() / totalLength * 100 + "%" + "，" + info.toString());
-        progressBar.setMax((int) totalLength);
     }
 
     @Override
@@ -67,7 +65,6 @@ public class MyDownloadListener4WithSpeed extends DownloadListener4WithSpeed {
         String speed = taskSpeed.speed();
         float percent = (float) currentOffset / totalLength * 100;
         Log.i("123", "【6、progress】" + currentOffset + "[" + progressStatus + "]，速度：" + speed + "，进度：" + percent + "%");
-        progressBar.setProgress((int) currentOffset);
     }
 
     @Override
@@ -78,6 +75,6 @@ public class MyDownloadListener4WithSpeed extends DownloadListener4WithSpeed {
     @Override
     public void taskEnd(@NonNull DownloadTask task, @NonNull EndCause cause, @Nullable Exception realCause, @NonNull SpeedCalculator taskSpeed) {
         Log.i("123", "【8、taskEnd】" + cause.name() + "：" + (realCause != null ? realCause.getMessage() : "无异常"));
-        Utils.dealEnd(context, itemInfo, cause);
     }
+    
 }
