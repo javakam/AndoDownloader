@@ -14,7 +14,10 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingLeft="20dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:visibility="gone">
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/rb_serial"
@@ -35,28 +38,46 @@
             android:text="并行" />
     </RadioGroup>
 
-    <Button
-        android:id="@+id/btn_delete_files"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="删除文件" />
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
-    <Button
-        android:id="@+id/tv_tasks_start"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:gravity="center"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
-        tools:text="全部开始" />
+        <Button
+            android:id="@+id/tv_tasks_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            tools:text="全部开始" />
+
+        <Button
+            android:id="@+id/btn_delete_files"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="删除文件"
+            android:textColor="@android:color/black"
+            android:textSize="15sp" />
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_tasks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fadeScrollbars="false"
+        android:overScrollMode="always"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>

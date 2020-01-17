@@ -4,6 +4,11 @@
 
     <string name="start">开始</string>
     <string name="cancel">取消</string>
+    <string name="completed">完成</string>
+    <string name="delete">删除</string>
+    <string name="goon">继续</string>
+    <string name="retry">重试</string><!-- 暂停,删除,下载 -->
+
     <string name="parallel">Parallel</string>
     <string name="serial">Serial</string>
     <string name="priority">Priority(%1$d)</string>

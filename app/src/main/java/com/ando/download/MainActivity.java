@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.ando.download.demo.DemoActivity;
-import com.ando.download.many.ManyTaskActivity;
+import com.ando.download.many.QueueTaskActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -29,7 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 12);
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                99);
         findViewById(R.id.tv1).setOnClickListener(this);
         findViewById(R.id.tv2).setOnClickListener(this);
         findViewById(R.id.tv3).setOnClickListener(this);
@@ -45,12 +47,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.tv2:
                 break;
             case R.id.tv3:// "ヾ(o◕∀◕)ﾉヾ 多任务下载 ヾ(o◕∀◕)ﾉヾ ",
-                startActivity(new Intent(this, ManyTaskActivity.class));
+                startActivity(new Intent(this, QueueTaskActivity.class));
                 break;
             default:
         }
     }
-
 
 
 }

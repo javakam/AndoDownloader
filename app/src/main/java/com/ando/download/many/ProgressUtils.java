@@ -1,9 +1,18 @@
-package com.ando.download.config;
+package com.ando.download.many;
 
 import android.os.Build;
 import android.widget.ProgressBar;
 
-public class ProgressUtil {
+/**
+ * Title:ProgressUtils
+ * <p>
+ * Description: 进度辅助工具
+ * </p>
+ *
+ * @author Changbao
+ * @date 2020/1/17 16:36
+ */
+public class ProgressUtils {
 
     public static void updateProgressToViewWithMark(ProgressBar bar, long currentOffset) {
         updateProgressToViewWithMark(bar, currentOffset, true);
@@ -11,7 +20,9 @@ public class ProgressUtil {
 
     public static void updateProgressToViewWithMark(ProgressBar bar, long currentOffset,
                                                     boolean anim) {
-        if (bar.getTag() == null) return;
+        if (bar.getTag() == null) {
+            return;
+        }
 
         final int shrinkRate = (int) bar.getTag();
         final int progress = (int) ((currentOffset) / shrinkRate);
@@ -33,8 +44,7 @@ public class ProgressUtil {
     /**
      * 向 ProgressBar 设置进度
      */
-    public static void calcProgressToViewAndMark(ProgressBar bar, long offset, long total,
-                                                 boolean anim) {
+    public static void calcProgressToViewAndMark(ProgressBar bar, long offset, long total, boolean anim) {
         final int contentLengthOnInt = reducePrecision(total);
         final int shrinkRate = contentLengthOnInt == 0
                 ? 1 : (int) (total / contentLengthOnInt);

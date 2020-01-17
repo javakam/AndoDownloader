@@ -8,21 +8,37 @@
         android:id="@+id/tv1"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:background="@android:color/black"
         android:gravity="center"
-        android:text="Demo" />
+        android:padding="5dp"
+        android:text="不错的Demo"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv2"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginTop="1dp"
+        android:background="@android:color/black"
         android:gravity="center"
-        android:text="文件选择" />
+        android:padding="5dp"
+        android:text="文件选择 + 上传"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv3"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginTop="1dp"
+        android:background="@android:color/black"
+        android:ellipsize="end"
         android:gravity="center"
-        android:text="多任务" />
+        android:maxLines="1"
+        android:padding="5dp"
+        android:text="列表下载(全部开始 + 每一条单独控制)"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
 
 </LinearLayout>

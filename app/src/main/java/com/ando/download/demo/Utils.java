@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 public class Utils {
+
     public static final String PARENT_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/aatest";
     public static final String PARENT_PATH2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/manytest";
 
@@ -48,10 +49,11 @@ public class Utils {
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileProvider", file);
             //【content://{$authority}/external/temp.apk】或【content://{$authority}/files/123/temp2.apk】
+            uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileProvider", file);
         } else {
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//【file:///storage/emulated/0/temp.apk】
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //【file:///storage/emulated/0/temp.apk】
             uri = Uri.fromFile(file);
         }
         Log.i("123", "【Uri】" + uri);
@@ -75,20 +77,27 @@ public class Utils {
     /**
      * 删除一个文件，或删除一个目录下的所有文件
      *
-     * @param dirFile      要删除的目录，可以是一个文件
-     * @param filter       对要删除的文件的匹配规则(不作用于目录)，如果要删除所有文件请设为 null
-     * @param isDeleateDir 是否删除目录，false时只删除目录下的文件而不删除目录
+     * @param dirFile     要删除的目录，可以是一个文件
+     * @param filter      对要删除的文件的匹配规则(不作用于目录)，如果要删除所有文件请设为 null
+     * @param isDeleteDir 是否删除目录，false时只删除目录下的文件而不删除目录
      */
-    public static void deleteFiles(File dirFile, FilenameFilter filter, boolean isDeleateDir) {
+    public static void deleteFiles(File dirFile, FilenameFilter filter, boolean isDeleteDir) {
+        if (dirFile==null) {
+            System.out.println("文件不存在");
+            return;
+        }
+
         if (dirFile.isDirectory()) {//是目录
-            for (File file : dirFile.listFiles()) {
-                deleteFiles(file, filter, isDeleateDir);//递归
+            if (dirFile.listFiles() != null) {
+                for (File file : dirFile.listFiles()) {
+                    deleteFiles(file, filter, isDeleteDir);//递归
+                }
             }
-            if (isDeleateDir) {
+            if (isDeleteDir) {
                 System.out.println("目录【" + dirFile.getAbsolutePath() + "】删除" + (dirFile.delete() ? "成功" : "失败"));//必须在删除文件后才能删除目录
             }
         } else if (dirFile.isFile()) {//是文件。注意 isDirectory 为 false 并非就等价于 isFile 为 true
-            String symbol = isDeleateDir ? "\t" : "";
+            String symbol = isDeleteDir ? "\t" : "";
             if (filter == null || filter.accept(dirFile.getParentFile(), dirFile.getName())) {//是否满足匹配规则
                 System.out.println(symbol + "- 文件【" + dirFile.getAbsolutePath() + "】删除" + (dirFile.delete() ? "成功" : "失败"));
             } else {
@@ -115,4 +124,5 @@ public class Utils {
             }
         }
     }
+
 }

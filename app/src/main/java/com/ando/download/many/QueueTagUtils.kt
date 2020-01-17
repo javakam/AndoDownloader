@@ -2,7 +2,7 @@ package com.ando.download.many
 
 import com.liulishuo.okdownload.DownloadTask
 
-object TagUtil {
+object QueueTagUtils {
     private const val KEY_STATUS = 0
     private const val KEY_OFFSET = 1
     private const val KEY_TOTAL = 2
