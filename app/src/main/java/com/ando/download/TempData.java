@@ -1,5 +1,6 @@
-package com.ando.download.config;
+package com.ando.download;
 
+import com.ando.download.config.TaskBean;
 import com.ando.download.demo.Utils;
 
 import java.util.ArrayList;

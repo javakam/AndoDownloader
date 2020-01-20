@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.ando.download.R;
-import com.ando.download.config.TempData;
+import com.ando.download.TempData;
 import com.liulishuo.okdownload.DownloadContext;
 import com.liulishuo.okdownload.DownloadContextListener;
 import com.liulishuo.okdownload.DownloadTask;
@@ -78,7 +78,7 @@ public class QueueTaskActivity extends AppCompatActivity {
                 // to cancel
                 controller.stop();
 
-                mBtnDelete.setEnabled(false);
+                mBtnDelete.setEnabled(true);
 
                 if (mAdapter != null) {
                     mAdapter.notifyDataSetChanged();
