@@ -1,4 +1,4 @@
-package com.ando.download.many;
+package com.ando.download.queue;
 
 import android.os.Build;
 import android.widget.ProgressBar;

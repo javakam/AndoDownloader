@@ -5,8 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.ando.download.chooser.FileChooseActivity;
 import com.ando.download.demo.DemoActivity;
-import com.ando.download.many.QueueTaskActivity;
+import com.ando.download.queue.QueueTaskActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, DemoActivity.class));
                 break;
             case R.id.tv2:
+                startActivity(new Intent(this, FileChooseActivity.class));
                 break;
             case R.id.tv3:// "ヾ(o◕∀◕)ﾉヾ 多任务下载 ヾ(o◕∀◕)ﾉヾ ",
                 startActivity(new Intent(this, QueueTaskActivity.class));

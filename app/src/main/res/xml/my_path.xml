@@ -3,44 +3,61 @@
     <!--        -->
 
     <!--代表设备的根目录new File("/");-->
+    <!-- BUG: 找不到文件的异常,root-path 的path 必须置空!!!!!!!  https://blog.csdn.net/honjane/article/details/54411820   -->
     <root-path
         name="root"
-        path="root" />
+        path="" />
 
     <!--context.getFilesDir()-->
     <files-path
         name="files"
-        path="files" />
+        path="." />
 
     <!--context.getCacheDir()-->
     <cache-path
         name="cache"
-        path="cache" />
+        path="." />
 
     <!--context.getExternalFilesDirs()-->
     <external-files-path
         name="name"
-        path="path" />
+        path="." />
 
     <!-- getExternalCacheDirs() 此标签需要 support 25.0.0以上才可以使用-->
     <external-cache-path
         name="name"
-        path="path" />
+        path="." />
 
     <!--   代表的目录即为：Environment.getExternalStorageDirectory()/Android/data/包名/-->
     <!--   path="Android/data/包名/"  -->
     <external-path
-        name="files_root"
-        path="Android/data/com.ando.download/" />
-
-    <!--  Environment.getExternalStorageDirectory() -->
-    <external-path
         name="external_storage_root"
         path="." />
 
+    <!--  Environment.getExternalStorageDirectory() -->
+    <!--    <external-path-->
+    <!--        name="external_storage_root"-->
+    <!--        path="." />-->
+
     <!--  代表的目录即为：Environment.getExternalStorageDirectory()/pics-->
-    <external-path
-        name="external"
-        path="pics" />
+    <!--    <external-path-->
+    <!--        name="external"-->
+    <!--        path="pics" />-->
 
 </paths>
+
+    <!--
+    示例:
+
+    files-path -表示Context.getFilesDir()目录或者其子目录。  -   示例: /data/data/com.chen.gradle/files/test1
+
+    cache-path -表示Context.getCacheDir()目录或者其子目录。 -示例: /data/data/com.chen.gradle/cache/test2
+
+    external-path -表示Environment.getExternalStorageDirectory()目录或者其子目录。 -示例: /storage/emulated/0/test3
+
+    external-files-path -表示Context.getExternalFilesDir(null)目录或者其子目录。 -示例:/storage/emulated/0/Android/data/com.chen.gradle/files/test4
+
+    external-cache-path -表示Context.getExternalCacheDir()目录或者其子目录。 -示例: /storage/emulated/0/Android/data/com.chen.gradle/cache/test5
+
+
+    -->

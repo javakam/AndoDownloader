@@ -1,4 +1,4 @@
-package com.ando.download.many;
+package com.ando.download.queue;
 
 import com.ando.download.R;
 import com.chad.library.adapter.base.BaseQuickAdapter;

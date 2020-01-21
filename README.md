@@ -7,3 +7,7 @@
 - Simple <https://github.com/lingochamp/okdownload/wiki/Simple-Use-Guideline>
 
 - Advanced <https://github.com/lingochamp/okdownload/wiki/Advanced-Use-Guideline>
+
+- AndroidFilePicker <https://github.com/rosuH/AndroidFilePicker/blob/master/README_CN.md>
+
+- FilePicker <https://github.com/chsmy/FilePicker>

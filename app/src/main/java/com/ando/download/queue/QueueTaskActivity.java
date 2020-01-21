@@ -1,4 +1,4 @@
-package com.ando.download.many;
+package com.ando.download.queue;
 
 import android.Manifest;
 import android.os.Bundle;
