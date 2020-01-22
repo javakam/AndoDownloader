@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 
+import com.ando.download.App;
+
 import java.io.File;
 
 import androidx.core.content.FileProvider;
@@ -14,13 +16,31 @@ import androidx.core.content.FileProvider;
  * <p>
  * https://www.cnblogs.com/kangweifeng/p/11264217.html
  */
-public class OpenFile {
+public class OpenFileUtils {
 
-    private static Context mContext;
     private static final String fileProvider = ".fileProvider";
 
-    public static Intent openFile(String filePath, Context context) {
-        mContext = context;
+    /**
+     * 声明各种类型文件的dataType
+     **/
+    private static final String DATA_TYPE_APK = "application/vnd.android.package-archive";
+    private static final String DATA_TYPE_VIDEO = "video/*";
+    private static final String DATA_TYPE_AUDIO = "audio/*";
+    private static final String DATA_TYPE_HTML = "text/html";
+    private static final String DATA_TYPE_IMAGE = "image/*";
+    private static final String DATA_TYPE_PPT = "application/vnd.ms-powerpoint";
+    private static final String DATA_TYPE_EXCEL = "application/vnd.ms-excel";
+    private static final String DATA_TYPE_WORD = "application/msword";
+    private static final String DATA_TYPE_CHM = "application/x-chm";
+    private static final String DATA_TYPE_TXT = "text/plain";
+    private static final String DATA_TYPE_PDF = "application/pdf";
+    /**
+     * 未指定明确的文件类型，不能使用精确类型的工具打开，需要用户选择
+     */
+    private static final String DATA_TYPE_ALL = "*/*";
+
+
+    public static Intent openFile(Context context, String filePath) {
         File file = new File(filePath);
         if (!file.exists()) {
             return null;
@@ -28,40 +48,59 @@ public class OpenFile {
         /* 取得扩展名 */
         final String end = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length()).toLowerCase();
         /* 依扩展名的类型决定MimeType */
-        if (end.equals("m4a") || end.equals("mp3") || end.equals("mid") ||
-                end.equals("xmf") || end.equals("ogg") || end.equals("wav")) {
-            return getAudioFileIntent(filePath);
-        } else if (end.equals("3gp") || end.equals("mp4") || end.equals("m3u8") || end.equals("avi")) {
-            return getVideoFileIntent(filePath);
-        } else if (end.equals("jpg") || end.equals("gif") || end.equals("png") ||
-                end.equals("jpeg") || end.equals("bmp")) {
-            return getImageFileIntent(filePath);
-        } else if (end.equals("apk")) {
-            return getApkFileIntent(filePath);
-        } else if (end.equals("ppt") || end.equals("pptx")) {
-            return getPptFileIntent(filePath);
-        } else if (end.equals("xls")) {
-            return getExcelFileIntent(filePath);
-        } else if (end.equals("doc") || end.equals("docx")) {
-            return getWordFileIntent(filePath);
-        } else if (end.equals("pdf")) {
-            return getPdfFileIntent(filePath);
-        } else if (end.equals("chm")) {
-            return getChmFileIntent(filePath);
-        } else if (end.equals("txt")) {
-            return getTextFileIntent(filePath, false);
-        } else if (end.equals("html") || end.equals("htm")|| end.equals("md")) {
-            return getHtmlFileIntent(filePath);
-        } else {
-            return getAllIntent(filePath);
+        switch (end) {
+            case "m4a":
+            case "mp3":
+            case "mid":
+            case "xmf":
+            case "ogg":
+            case "wav":
+                return getAudioFileIntent(filePath);
+            case "3gp":
+            case "mp4":
+            case "m3u8":
+            case "avi":
+                return getVideoFileIntent(filePath);
+            case "jpg":
+            case "gif":
+            case "png":
+            case "jpeg":
+            case "bmp":
+                return getImageFileIntent(filePath);
+            case "apk":
+                return getApkFileIntent(filePath);
+            case "ppt":
+            case "pptx":
+                return getPptFileIntent(filePath);
+            case "xls":
+                return getExcelFileIntent(filePath);
+            case "doc":
+            case "docx":
+                return getWordFileIntent(filePath);
+            case "pdf":
+                return getPdfFileIntent(filePath);
+            case "chm":
+                return getChmFileIntent(filePath);
+            case "txt":
+                return getTextFileIntent(filePath, false);
+            case "html":
+            case "htm":
+            case "md":
+                return getHtmlFileIntent(filePath);
+            default:
+                return getAllIntent(filePath);
         }
     }
 
     private static Uri getUri(String path) {
+        return getUri(App.getApp(), path);
+    }
+
+    private static Uri getUri(Context context, String path) {
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            String authority = mContext.getPackageName() + fileProvider;
-            uri = FileProvider.getUriForFile(mContext, authority, new File(path));
+            String authority = context.getPackageName() + fileProvider;
+            uri = FileProvider.getUriForFile(context, authority, new File(path));
         } else {
             uri = Uri.fromFile(new File(path));
         }
@@ -74,7 +113,7 @@ public class OpenFile {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
         Uri uri = getUri(param);
-        intent.setDataAndType(uri, "*/*");
+        intent.setDataAndType(uri, DATA_TYPE_ALL);
         return intent;
     }
 
@@ -85,7 +124,7 @@ public class OpenFile {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
         Uri uri = getUri(param);
-        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        intent.setDataAndType(uri, DATA_TYPE_APK);
         return intent;
     }
 
@@ -97,7 +136,7 @@ public class OpenFile {
         intent.putExtra("oneshot", 0);
         intent.putExtra("configchange", 0);
         Uri uri = getUri(param);
-        intent.setDataAndType(uri, "video/*");
+        intent.setDataAndType(uri, DATA_TYPE_VIDEO);
         return intent;
     }
 
@@ -109,7 +148,7 @@ public class OpenFile {
         intent.putExtra("oneshot", 0);
         intent.putExtra("configchange", 0);
         Uri uri = getUri(param);
-        intent.setDataAndType(uri, "audio/*");
+        intent.setDataAndType(uri, DATA_TYPE_AUDIO);
         return intent;
     }
 
@@ -118,7 +157,7 @@ public class OpenFile {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         Uri uri = getUri(param);
-        intent.setDataAndType(uri, "text/html");
+        intent.setDataAndType(uri, DATA_TYPE_HTML);
         return intent;
     }
 
@@ -130,7 +169,7 @@ public class OpenFile {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         Uri uri = getUri(param);
-        intent.setDataAndType(uri, "image/*");
+        intent.setDataAndType(uri, DATA_TYPE_IMAGE);
         return intent;
     }
 
@@ -142,7 +181,7 @@ public class OpenFile {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri = getUri(param);
-        intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
+        intent.setDataAndType(uri, DATA_TYPE_PPT);
         return intent;
     }
 
@@ -154,7 +193,7 @@ public class OpenFile {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri = getUri(param);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        intent.setDataAndType(uri, "application/vnd.ms-excel");
+        intent.setDataAndType(uri, DATA_TYPE_EXCEL);
         return intent;
     }
 
@@ -166,7 +205,7 @@ public class OpenFile {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri = getUri(param);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        intent.setDataAndType(uri, "application/msword");
+        intent.setDataAndType(uri, DATA_TYPE_WORD);
         return intent;
     }
 
@@ -178,7 +217,7 @@ public class OpenFile {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         Uri uri = getUri(param);
-        intent.setDataAndType(uri, "application/x-chm");
+        intent.setDataAndType(uri, DATA_TYPE_CHM);
         return intent;
     }
 
@@ -190,10 +229,10 @@ public class OpenFile {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (paramBoolean) {
             Uri uri1 = getUri(param);
-            intent.setDataAndType(uri1, "text/plain");
+            intent.setDataAndType(uri1, DATA_TYPE_TXT);
         } else {
             Uri uri2 = getUri(param);
-            intent.setDataAndType(uri2, "text/plain");
+            intent.setDataAndType(uri2, DATA_TYPE_TXT);
         }
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         return intent;
@@ -207,7 +246,7 @@ public class OpenFile {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         Uri uri = getUri(param);
-        intent.setDataAndType(uri, "application/pdf");
+        intent.setDataAndType(uri, DATA_TYPE_PDF);
         return intent;
     }
 

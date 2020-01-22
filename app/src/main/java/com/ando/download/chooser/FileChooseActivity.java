@@ -9,16 +9,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ando.download.R;
+import com.ando.download.base.BaseSwipeItemActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import static com.ando.download.config.FileConstant.REQUEST_CHOOSEFILE;
 
@@ -33,25 +31,19 @@ import static com.ando.download.config.FileConstant.REQUEST_CHOOSEFILE;
  * @author Changbao
  * @date 2020/1/21  11:01
  */
-public class FileChooseActivity extends AppCompatActivity {
+public class FileChooseActivity extends BaseSwipeItemActivity {
 
     private TextView tv_file_path;
     private Button bt_file_path;
-    private RecyclerView rv_file_list;
     private FilePickerShowAdapter mAdapter;
     private List<FileBean> mFiles;
 
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_file_choose);
+    protected void initViews(Bundle savedInstanceState) {
         mFiles = new ArrayList<>();
 
         tv_file_path = findViewById(R.id.tv_file_path);
         bt_file_path = findViewById(R.id.bt_file_path);
-        rv_file_list = findViewById(R.id.rv_file_list);
 
         //选择文件
         bt_file_path.setOnClickListener(new View.OnClickListener() {
@@ -70,22 +62,29 @@ public class FileChooseActivity extends AppCompatActivity {
                 Log.w("123", "mFiles : " + mFiles.size() + "position : " + position);
 
                 if (view.getId() == R.id.xmlRootLayout) {
-                    Intent intent = Intent.createChooser(OpenFile.openFile(mFiles.get(position).getPath(),
-                            getApplicationContext()),
+                    Intent intent = Intent.createChooser(OpenFileUtils.openFile(getApplicationContext(),
+                            mFiles.get(position).getPath()),
                             "选择程序");
                     startActivity(intent);
 
-                } else if (view.getId() == R.id.iv_delete) {
-                    mFiles.remove(position);
-                    mAdapter.replaceData(mFiles);
+                } else if (view.getId() == R.id.btn_file_upload) {
+                    //上传文件
+                    //todo 2020年1月22日 16:51:49  文件上传
+                    //https://blog.csdn.net/k_bb_666/article/details/79612555  代码:  https://github.com/kb18519142009/UploadService
+                    //Okhttp Official Demo https://github.com/square/okhttp/tree/master/samples
 
-                    Log.w("123", "mFiles : " + mFiles.size() + "position : " + position);
+
                 }
             }
         });
 
-        rv_file_list.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
+    }
 
+    @Override
+    protected void onDeleteClick(SwipeMenuBridge menuBridge, int position, int menuPosition) {
+        mFiles.remove(position);
+        mAdapter.replaceData(mFiles);
     }
 
     private void chooseFile() {
@@ -133,5 +132,12 @@ public class FileChooseActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_file_choose;
+    }
+
 
 }

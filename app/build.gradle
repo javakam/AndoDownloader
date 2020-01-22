@@ -32,8 +32,9 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-
     implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.0'
 
     // core
     implementation 'com.liulishuo.okdownload:okdownload:1.0.7-SNAPSHOT'
@@ -41,15 +42,13 @@ dependencies {
     implementation 'com.liulishuo.okdownload:sqlite:1.0.7-SNAPSHOT'
     // provide okhttp to connect to backend
     implementation 'com.liulishuo.okdownload:okhttp:1.0.7-SNAPSHOT'
-
-
+    // provide interface for kotlin extension
+    implementation 'com.liulishuo.okdownload:ktx:1.0.7-SNAPSHOT'
     // provide interface to match filedownloader
     //implementation 'com.liulishuo.okdownload:filedownloader:1.0.7-SNAPSHOT'
 
-    // provide interface for kotlin extension
-    //implementation 'com.liulishuo.okdownload:ktx:1.0.7-SNAPSHOT'
-
 
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta11'
+    implementation 'com.yanzhenjie.recyclerview:x:1.3.2'
 
 }

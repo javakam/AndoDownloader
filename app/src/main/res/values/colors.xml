@@ -3,4 +3,11 @@
     <color name="colorPrimary">#2B2B2B</color>
     <color name="colorPrimaryDark">#1A1A1A</color>
     <color name="colorAccent">#EE3B3B</color>
+
+
+    <color name="red_normal">#FF0000</color>
+    <color name="red_pressed">#FF6666</color>
+
+    <color name="divider_color">#B7B2B2</color>
+
 </resources>

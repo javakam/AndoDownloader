@@ -14,7 +14,6 @@
         android:padding="10dp"
         android:text="文件路径" />
 
-
     <Button
         android:id="@+id/bt_file_path"
         android:layout_width="wrap_content"
@@ -22,8 +21,8 @@
         android:layout_marginTop="10dp"
         android:text="选择文件" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_file_list"
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
+        android:id="@+id/recyclerViewSwipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="always"
