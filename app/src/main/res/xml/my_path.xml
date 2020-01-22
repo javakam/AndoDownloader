@@ -20,19 +20,19 @@
 
     <!--context.getExternalFilesDirs()-->
     <external-files-path
-        name="name"
+        name="external_files"
         path="." />
 
     <!-- getExternalCacheDirs() 此标签需要 support 25.0.0以上才可以使用-->
     <external-cache-path
-        name="name"
+        name="external_cache"
         path="." />
 
-    <!--   代表的目录即为：Environment.getExternalStorageDirectory()/Android/data/包名/-->
+    <!-- Environment.getExternalStorageDirectory()-->
     <!--   path="Android/data/包名/"  -->
     <external-path
-        name="external_storage_root"
-        path="." />
+        name="external_storage"
+        path="storage" />
 
     <!--  Environment.getExternalStorageDirectory() -->
     <!--    <external-path-->
