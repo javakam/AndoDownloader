@@ -1,4 +1,4 @@
-package com.ando.download.queue;
+package com.ando.download.queue.speed;
 
 import com.ando.download.R;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Title: QueueTaskAdapter
+ * Title: QueueTaskAdapter4WithSpeed
  * <p>
  * Description:
  * </p>
@@ -17,26 +17,20 @@ import org.jetbrains.annotations.Nullable;
  * @author Changbao
  * @date 2020/1/15  16:47
  */
-public class QueueTaskAdapter extends BaseQuickAdapter<DownloadTask, BaseViewHolder> {
+public class QueueTaskAdapter4WithSpeed extends BaseQuickAdapter<DownloadTask, BaseViewHolder> {
 
-    private QueueController controller;
+    private QueueController4WithSpeed controller;
 
-    public QueueTaskAdapter(QueueController controller) {
+    public QueueTaskAdapter4WithSpeed(QueueController4WithSpeed controller) {
         super(R.layout.item_queue_speed);
         this.controller = controller;
     }
 
     @Override
     protected void convert(@NotNull BaseViewHolder holder, @Nullable DownloadTask bean) {
-        if (bean!=null) {
-            controller.bind(holder, bean);
+        if (bean != null) {
+            controller.bind(this, holder, bean);
         }
-
-//        Button itemAction = holder.getView(R.id.bt_down_action);
-//        TextView nameTv = holder.getView(R.id.tv_down_name);
-//        TextView statusTv = holder.getView(R.id.tv_down_status);
-//        ProgressBar progressBar = holder.getView(R.id.progressbar_down);
-
     }
 
     @Override
@@ -44,4 +38,8 @@ public class QueueTaskAdapter extends BaseQuickAdapter<DownloadTask, BaseViewHol
         return controller.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

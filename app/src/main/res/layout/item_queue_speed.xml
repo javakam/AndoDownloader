@@ -16,17 +16,64 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="name" />
 
+    <ImageView
+        android:id="@+id/iv_down_delete"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginLeft="15dp"
+        android:src="@mipmap/ic_file_delete"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_down_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_down_name"
+        app:layout_constraintTop_toTopOf="@id/tv_down_name" />
+
     <TextView
         android:id="@+id/tv_down_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:maxLines="1"
-        android:textSize="16sp"
+        android:textSize="13sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_down_name"
+        app:layout_constraintTop_toBottomOf="@+id/bt_down_action"
         tools:text="status" />
 
+    <TextView
+        android:id="@+id/tv_down_written_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/tv_down_status"
+        app:layout_constraintTop_toTopOf="@id/tv_down_status"
+        tools:text="status" />
+
+    <TextView
+        android:id="@+id/tv_down_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:maxLines="1"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toRightOf="@id/tv_down_written_total"
+        app:layout_constraintTop_toTopOf="@id/tv_down_written_total"
+        tools:text="status" />
+
+    <TextView
+        android:id="@+id/tv_down_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:maxLines="1"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toRightOf="@id/tv_down_speed"
+        app:layout_constraintTop_toTopOf="@id/tv_down_speed"
+        tools:text="status" />
 
     <Button
         android:id="@+id/bt_down_action"
@@ -35,7 +82,6 @@
         android:text="开始"
         android:textColor="@android:color/black"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/tv_down_status"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintLeft_toRightOf="@id/tv_down_name"
         app:layout_constraintRight_toRightOf="parent"
@@ -67,6 +113,6 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bt_down_action" />
+        app:layout_constraintTop_toBottomOf="@id/tv_down_status" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

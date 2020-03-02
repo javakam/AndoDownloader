@@ -1,4 +1,4 @@
-package com.ando.download.queue;
+package com.ando.download.queue.speed;
 
 import android.util.Log;
 
@@ -26,7 +26,7 @@ import androidx.annotation.Nullable;
  * @author Changbao
  * @date 2020/1/16  15:22
  */
-public class QueueDownloadListener4WithSpeed extends DownloadListener4WithSpeed {
+public class QueueDownloadListener4WithSpeedJava extends DownloadListener4WithSpeed {
 
     private long totalLength;
     private String readableTotalLength;

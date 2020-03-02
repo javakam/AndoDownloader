@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@android:color/black"
-        android:gravity="center"
-        android:padding="5dp"
+        android:gravity="left|center_vertical"
+        android:padding="10dp"
         android:text="不错的Demo"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
@@ -21,8 +21,8 @@
         android:layout_height="50dp"
         android:layout_marginTop="1dp"
         android:background="@android:color/black"
-        android:gravity="center"
-        android:padding="5dp"
+        android:gravity="left|center_vertical"
+        android:padding="10dp"
         android:text="文件选择 + 上传"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
@@ -34,10 +34,24 @@
         android:layout_marginTop="1dp"
         android:background="@android:color/black"
         android:ellipsize="end"
-        android:gravity="center"
+        android:gravity="left|center_vertical"
         android:maxLines="1"
-        android:padding="5dp"
+        android:padding="10dp"
         android:text="列表下载(全部开始 + 每一条单独控制)"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv4"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="1dp"
+        android:background="@android:color/black"
+        android:ellipsize="end"
+        android:gravity="left|center_vertical"
+        android:maxLines="2"
+        android:padding="10dp"
+        android:text="列表下载(全部开始 + 每一条单独控制 + 速度 + 进度)"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
 

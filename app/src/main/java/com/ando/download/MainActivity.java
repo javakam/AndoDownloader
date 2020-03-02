@@ -8,6 +8,7 @@ import android.view.View;
 import com.ando.download.chooser.FileChooseActivity;
 import com.ando.download.demo.DemoActivity;
 import com.ando.download.queue.QueueTaskActivity;
+import com.ando.download.queue.speed.QueueTaskActivity4WithSpeed;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tv1).setOnClickListener(this);
         findViewById(R.id.tv2).setOnClickListener(this);
         findViewById(R.id.tv3).setOnClickListener(this);
+        findViewById(R.id.tv4).setOnClickListener(this);
     }
 
     @Override
@@ -50,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.tv3:// "ヾ(o◕∀◕)ﾉヾ 多任务下载 ヾ(o◕∀◕)ﾉヾ ",
                 startActivity(new Intent(this, QueueTaskActivity.class));
+                break;
+            case R.id.tv4:// "ヾ(o◕∀◕)ﾉヾ 多任务下载 ヾ(o◕∀◕)ﾉヾ ",  + 速度 + 进度
+                startActivity(new Intent(this, QueueTaskActivity4WithSpeed.class));
                 break;
             default:
         }
