@@ -9,9 +9,9 @@
     <string name="goon">继续</string>
     <string name="retry">重试</string><!-- 暂停,删除,下载 -->
 
-    <string name="parallel">Parallel</string>
-    <string name="serial">Serial</string>
-    <string name="priority">Priority(%1$d)</string>
+    <string name="parallel">并行</string>
+    <string name="serial">串行</string>
+    <string name="priority">优先级(%1$d)</string>
     <string name="state_idle">空闲</string>
     <string name="state_pending">准备中</string>
     <string name="state_unknown">未知</string>
