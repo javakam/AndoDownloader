@@ -36,12 +36,11 @@ public class QueueTaskActivity4WithSpeed extends AppCompatActivity {
 
     public static final String DOWNLOAD_FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/manytest4speed";
 
-    private RecyclerView mRvTasks;
-    private QueueTaskAdapter4WithSpeed mAdapter;
 
     private Button mBtnDelete;
     private Button mTvAction;
 
+    private DownloadView mDownLoadView;
     private QueueController4WithSpeed controller;
 
     @Override
@@ -54,21 +53,18 @@ public class QueueTaskActivity4WithSpeed extends AppCompatActivity {
 
         mBtnDelete = findViewById(R.id.btn_delete_files);
         mTvAction = findViewById(R.id.tv_tasks_start);
-        mRvTasks = findViewById(R.id.rv_tasks);
+
+        mDownLoadView = findViewById(R.id.download_view);
+        controller = mDownLoadView.getController();
 
         initData();
-        initRecyclerView();
         initAction();
 
     }
 
-
     private void initData() {
 
-        controller = new QueueController4WithSpeed();
-
-        //快速初始化 use -> createDownloadContextListener
-        controller.initTasks(TempData.getTaskBeans(Utils.PARENT_PATH2), this, new DownloadContextListener() {
+        mDownLoadView.setData(TempData.getTaskBeans(Utils.PARENT_PATH2), new DownloadContextListener() {
             @Override
             public void taskEnd(@NonNull DownloadContext context, @NonNull DownloadTask task, @NonNull EndCause cause, @Nullable Exception realCause, int remainCount) {
             }
@@ -81,26 +77,11 @@ public class QueueTaskActivity4WithSpeed extends AppCompatActivity {
 
                 mBtnDelete.setEnabled(true);
 
-                if (mAdapter != null) {
-                    mAdapter.notifyDataSetChanged();
-                }
+                mDownLoadView.notifyDataSetChanged();
             }
         });
 
-
     }
-
-    private void initRecyclerView() {
-        mRvTasks.setItemAnimator(null);
-        mRvTasks.setHasFixedSize(true);
-        mAdapter = new QueueTaskAdapter4WithSpeed(controller);
-        mRvTasks.setAdapter(mAdapter);
-
-        if (mAdapter != null) {
-            mAdapter.replaceData(controller.getTaskList());
-        }
-    }
-
 
     private void initAction() {
         //全部删除
@@ -110,12 +91,9 @@ public class QueueTaskActivity4WithSpeed extends AppCompatActivity {
                 if (controller != null) {
                     controller.deleteFiles();
                 }
-                if (mAdapter != null) {
-                    mAdapter.notifyDataSetChanged();
-                }
+                mDownLoadView.notifyDataSetChanged();
             }
         });
-
 
         mTvAction.setText(R.string.start);
 
@@ -138,9 +116,7 @@ public class QueueTaskActivity4WithSpeed extends AppCompatActivity {
                     if (controller != null) {
                         controller.start(false);
                     }
-                    if (mAdapter != null) {
-                        mAdapter.notifyDataSetChanged();
-                    }
+                    mDownLoadView.notifyDataSetChanged();
 
                     mBtnDelete.setEnabled(false);
 

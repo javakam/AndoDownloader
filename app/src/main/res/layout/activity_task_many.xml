@@ -69,15 +69,9 @@
             android:textSize="15sp" />
     </LinearLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_tasks"
+    <com.ando.download.queue.speed.DownloadView
+        android:id="@+id/download_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fadeScrollbars="false"
-        android:overScrollMode="always"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>
