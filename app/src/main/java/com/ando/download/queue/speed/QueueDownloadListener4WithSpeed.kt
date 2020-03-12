@@ -68,7 +68,7 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
         // process references
         val status = QueueTagUtils.getStatus(task)
 
-        Log.i(TAG, "setProgress $status")
+        Log.i(TAG, "setProgress ${task.id}  $status")
 
         if (status != null) {
             //  started
@@ -77,6 +77,9 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
             tvTotal.visibility = View.VISIBLE
             tvSpeed.visibility = View.VISIBLE
             tvPercent.visibility = View.VISIBLE
+            tvTotal.text = ""
+            tvSpeed.text = ""
+            tvPercent.text = ""
 
             if (status == EndCause.COMPLETED.name) {
                 progressBar.progress = progressBar.max
@@ -284,7 +287,12 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
     }
 
     override fun taskEnd(task: DownloadTask, cause: EndCause, realCause: Exception?, taskSpeed: SpeedCalculator) {
-        //Log.i("123", "【8、taskEnd】" + cause.name + "：" + if (realCause != null) realCause.message else "无异常")
+        Log.i("123", "【8、taskEnd】${task.file?.absolutePath} " + cause.name + "：" + if (realCause != null) realCause.message else "无异常")
+//        if (task.id== QueueController4WithSpeed.deleteTask?.id){
+//            val tastStatus = StatusUtil.getStatus(task)
+//            QueueController4WithSpeed.deleteTask
+//
+//        }
 
         val status = cause.toString()
         QueueTagUtils.saveStatus(task, status)

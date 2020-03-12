@@ -89,17 +89,14 @@ class QueueController4WithSpeed {
         Log.i("123", "deleteFiles $queueDir Success!")
     }
 
-    fun deleteFile(holder: BaseViewHolder, task: DownloadTask) {
-        //DownloadTask.Id 对应 ViewHolder
-        listener.bind(task, holder)
-        //ViewHolder 设置数据
-        listener.resetInfo(task, holder)
+    fun deleteFile(task: DownloadTask) {
+
 
         if (queueDir == null) {
             return
         }
 
-        Log.e(TAG, "deleteFile Task: $task")
+        Log.e(TAG, "deleteFile Task: ${task.id}")
 
         val children = queueDir?.list()
         if (children != null) {
@@ -118,6 +115,7 @@ class QueueController4WithSpeed {
                     }
 
                     Log.w(TAG, "fileName : $fileName  realDeleteFile : ${realDeleteFile?.absolutePath}")
+
                 }
 
                 if (realDeleteFile == null) {
@@ -135,13 +133,14 @@ class QueueController4WithSpeed {
         for (t in taskList) {
             if (t == task) {
                 QueueTagUtils.clearProceedTask(t)
+                break
             }
         }
         taskList.remove(task)
 
-        Log.i("123", "deleteFile ${task.filename} Success!")
-    }
+        Log.i("123", "deleteFile task.id=${task.id}  task.filename=${task.filename} Success!")
 
+    }
 
     fun setPriority(task: DownloadTask, priority: Int) {
         val newTask = task.toBuilder().setPriority(priority).build()
@@ -188,7 +187,7 @@ class QueueController4WithSpeed {
         } else if (status == STATUS_DELETE) {
             Log.w(TAG, "$STATUS_DELETE......")
 
-            deleteFile(holder, task)
+            deleteFile(task)
             adapter?.replaceData(taskList)
         } else {
             Log.w(TAG, "继续....")
@@ -225,26 +224,36 @@ class QueueController4WithSpeed {
         //val progressBar: ProgressBar = holder.getView(R.id.progressbar_down)
 
         // 开始
-        btnAction.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-
-                if (TextUtils.equals(btnAction.text, STATUS_DELETE)) {
-                    flDelete.performClick()
-                } else {
-                    start(holder, task)
-                }
+        btnAction.setOnClickListener {
+            if (TextUtils.equals(btnAction.text, STATUS_DELETE)) {
+                flDelete.performClick()
+            } else {
+                start(holder, task)
             }
-        })
+        }
 
         // 删除
-        flDelete.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                task.cancel()
+        flDelete.setOnClickListener {
 
-                deleteFile(holder, task)
+            val status = QueueTagUtils.getStatus(task)
+            if (status == DownloadListener1Status.PROGRESS) {
+                task.cancel()
+                //deleteTask=task
+
+                it.postDelayed({
+                    //延时删除
+                    deleteFile(task)
+                    adapter.replaceData(taskList)
+
+                }, 500)
+
+            } else {
+                deleteFile(task)
                 adapter.replaceData(taskList)
+
             }
-        })
+
+        }
 
         /*// priority
         val priority = TagUtil.getPriority(task)
@@ -288,6 +297,9 @@ class QueueController4WithSpeed {
 
     companion object {
         private const val TAG = "123"
+
+        // var deleteTask: DownloadTask? = null
+
     }
 
 }
