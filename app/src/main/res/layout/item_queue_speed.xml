@@ -16,16 +16,23 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="name" />
 
-    <ImageView
-        android:id="@+id/iv_down_delete"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+    <FrameLayout
+        android:id="@+id/fl_down_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:src="@mipmap/ic_file_delete"
+        android:padding="8dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/tv_down_name"
         app:layout_constraintLeft_toRightOf="@id/tv_down_name"
-        app:layout_constraintTop_toTopOf="@id/tv_down_name" />
+        app:layout_constraintTop_toTopOf="@id/tv_down_name">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_file_delete" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tv_down_status"

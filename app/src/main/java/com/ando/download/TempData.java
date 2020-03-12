@@ -17,8 +17,7 @@ import java.util.List;
  */
 public class TempData {
 
-    public static List<TaskBean> getTaskBeans() {
-        final String parentPath = Utils.PARENT_PATH2;
+    public static List<TaskBean> getTaskBeans(String parentPath) {
 
         List<TaskBean> list = new ArrayList<>();
         TaskBean taskBean1 = new TaskBean("1. WeChat",

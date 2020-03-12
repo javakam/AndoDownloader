@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.ando.download.R;
 import com.ando.download.TempData;
+import com.ando.download.demo.Utils;
 import com.liulishuo.okdownload.DownloadContext;
 import com.liulishuo.okdownload.DownloadContextListener;
 import com.liulishuo.okdownload.DownloadTask;
@@ -67,7 +68,7 @@ public class QueueTaskActivity extends AppCompatActivity {
         controller = new QueueController();
 
         //快速初始化 use -> createDownloadContextListener
-        controller.initTasks(TempData.getTaskBeans(), this, new DownloadContextListener() {
+        controller.initTasks(TempData.getTaskBeans(Utils.PARENT_PATH), this, new DownloadContextListener() {
             @Override
             public void taskEnd(@NonNull DownloadContext context, @NonNull DownloadTask task, @NonNull EndCause cause, @Nullable Exception realCause, int remainCount) {
             }

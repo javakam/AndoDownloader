@@ -3,10 +3,7 @@ package com.ando.download.queue.speed
 import android.util.Log
 import android.util.SparseArray
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import com.ando.download.R
 import com.ando.download.queue.DownloadListener1Status
 import com.ando.download.queue.ProgressUtils
@@ -35,13 +32,12 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
         private const val TAG = "123"
     }
 
-    private var totalLength: Long = 0
-    private var readableTotalLength: String? = null
-
     private val holderMap = SparseArray<BaseViewHolder>()
+    private val totalLengthMap = SparseArray<Long>()
+    private val readableTotalLengthMap = SparseArray<String>()
 
     fun bind(task: DownloadTask, holder: BaseViewHolder) {
-        Log.i(TAG, "bind " + task.id + " with " + holder)
+        //Log.i(TAG, "bind " + task.id + " with " + holder)
         // replace.
         val size = holderMap.size()
         for (i in 0 until size) {
@@ -56,10 +52,14 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
 
     fun resetInfo(task: DownloadTask, holder: BaseViewHolder) {
         //Holder View
-        val ivDelete: ImageView = holder.getView(R.id.iv_down_delete)
-        val tvAction: Button = holder.getView(R.id.bt_down_action)
+        val flDelete: FrameLayout = holder.getView(R.id.fl_down_delete)
+        val btnAction: Button = holder.getView(R.id.bt_down_action)
         val tvStatus: TextView = holder.getView(R.id.tv_down_status)
         val progressBar: ProgressBar = holder.getView(R.id.progressbar_down)
+
+        val tvTotal: TextView = holder.getView(R.id.tv_down_written_total)
+        val tvSpeed: TextView = holder.getView(R.id.tv_down_speed)
+        val tvPercent: TextView = holder.getView(R.id.tv_down_percent)
 
         // task name
         val taskName = QueueTagUtils.getTaskName(task)
@@ -73,53 +73,85 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
         if (status != null) {
             //  started
             tvStatus.text = status
+
+            tvTotal.visibility = View.VISIBLE
+            tvSpeed.visibility = View.VISIBLE
+            tvPercent.visibility = View.VISIBLE
+
             if (status == EndCause.COMPLETED.name) {
                 progressBar.progress = progressBar.max
-                //tvAction.setText(R.string.delete)
+                btnAction.setText(R.string.delete)
+
+                flDelete.visibility = View.VISIBLE
             } else {
-                // tvAction.setText(R.string.cancel)
+                btnAction.setText(R.string.cancel)
+
                 val total = QueueTagUtils.getTotal(task)
                 if (total == 0L) {
                     progressBar.progress = 0
+
+                    flDelete.visibility = View.GONE
                 } else {
+                    flDelete.visibility = View.VISIBLE
+
                     //向 ProgressBar 设置进度
                     ProgressUtils.calcProgressToViewAndMark(progressBar,
                             QueueTagUtils.getOffset(task), total, false)
                 }
             }
+
         } else {
             // non-started
             val statusOnStore = StatusUtil.getStatus(task)
             QueueTagUtils.saveStatus(task, statusOnStore.toString())
+
+
+            tvTotal.visibility = View.GONE
+            tvSpeed.visibility = View.GONE
+            tvPercent.visibility = View.GONE
+            flDelete.visibility = View.VISIBLE
+
             if (statusOnStore == StatusUtil.Status.COMPLETED) {
                 tvStatus.text = EndCause.COMPLETED.name
                 progressBar.progress = progressBar.max
-                ivDelete.visibility = View.VISIBLE
+
+                Log.w("123", "${task.id}  ${statusOnStore.name}")
+                btnAction.setText(R.string.delete)
+                flDelete.visibility = View.VISIBLE
             } else {
                 when (statusOnStore) {
-                    StatusUtil.Status.IDLE    -> {
-                        tvStatus.setText(R.string.state_idle);// tvAction.setText(R.string.start)
+                    StatusUtil.Status.IDLE -> {
+                        tvStatus.setText(R.string.state_idle);
+                        // tvAction.setText(R.string.start)
                     }
                     StatusUtil.Status.PENDING -> {
-                        tvStatus.setText(R.string.state_pending); //tvAction.setText(R.string.start)
+                        tvStatus.setText(R.string.state_pending);
+                        //tvAction.setText(R.string.start)
                     }
                     StatusUtil.Status.RUNNING -> {
-                        tvStatus.setText(R.string.state_running); //tvAction.setText(R.string.cancel)
+                        tvStatus.setText(R.string.state_running);
+                        //tvAction.setText(R.string.cancel)
                     }
-                    else                      -> {
-                        tvStatus.setText(R.string.state_unknown); //tvAction.setText(R.string.start)
+                    else -> {
+                        tvStatus.setText(R.string.state_unknown);
+                        //tvAction.setText(R.string.start)
                     }
                 }
 
                 if (statusOnStore == StatusUtil.Status.UNKNOWN) {
                     progressBar.progress = 0
-                    // tvAction.setText(R.string.start)
+                    Log.w("123", "${task.id}  ${statusOnStore.name}")
+                    btnAction.setText(R.string.start)
+                    flDelete.visibility = View.GONE
                 } else {
-                    //  tvAction.setText(R.string.start)
+                    Log.e("123", "${task.id}  ${statusOnStore.name}")
+                    btnAction.setText(R.string.start)
 
                     //断点信息
                     val info = StatusUtil.getCurrentInfo(task)
                     if (info != null) {
+                        flDelete.visibility = View.VISIBLE
+
                         QueueTagUtils.saveTotal(task, info.totalLength)
                         QueueTagUtils.saveOffset(task, info.totalOffset)
                         //向 ProgressBar 设置进度
@@ -127,16 +159,20 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
                                 info.totalOffset, info.totalLength, false)
                     } else {
                         progressBar.progress = 0
+
+                        flDelete.visibility = View.GONE
                     }
                 }
+
             }
+
         }
     }
 
     fun clearBoundHolder() = holderMap.clear()
 
     override fun taskStart(task: DownloadTask) {
-        Log.i("123", "【1、taskStart】")
+        // Log.i("123", "【1、taskStart】")
 
         val status = DownloadListener1Status.TASKSTART
         QueueTagUtils.saveStatus(task, status)
@@ -148,25 +184,37 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
     }
 
     override fun infoReady(task: DownloadTask, info: BreakpointInfo, fromBreakpoint: Boolean, model: Listener4SpeedModel) {
-        totalLength = info.totalLength
-        readableTotalLength = Util.humanReadableBytes(totalLength, true)
-        Log.i("123", "【2、infoReady】当前进度" + info.totalOffset.toFloat() / totalLength * 100 + "%" + "，" + info.toString())
+//        totalLength = info.totalLength
+//        readableTotalLength = Util.humanReadableBytes(totalLength, true)
+
+        totalLengthMap.put(task.id, info.totalLength)
+        readableTotalLengthMap.put(task.id, Util.humanReadableBytes(info.totalLength, true))
+        // Log.i("123", "【2、infoReady】当前进度" + info.totalOffset.toFloat() / totalLength * 100 + "%" + "，" + info.toString())
     }
 
     override fun connectStart(task: DownloadTask, blockIndex: Int, requestHeaders: Map<String?, List<String?>?>) {
-        Log.i("123", "【3、connectStart】$blockIndex")
+        //Log.i("123", "【3、connectStart】$blockIndex")
     }
 
     override fun connectEnd(task: DownloadTask, blockIndex: Int, responseCode: Int, responseHeaders: Map<String?, List<String?>?>) {
-        Log.i("123", "【4、connectEnd】$blockIndex，$responseCode")
+        //Log.i("123", "【4、connectEnd】$blockIndex，$responseCode")
 
         val status = DownloadListener1Status.CONNECTED
         QueueTagUtils.saveStatus(task, status)
-        QueueTagUtils.saveTotal(task, totalLength)
+        // QueueTagUtils.saveTotal(task, totalLength)
+        QueueTagUtils.saveTotal(task, totalLengthMap.get(task.id))
+
     }
 
-    override fun progressBlock(task: DownloadTask, blockIndex: Int, currentBlockOffset: Long, blockSpeed: SpeedCalculator) { //Log.i("123", "【5、progressBlock】" + blockIndex + "，" + currentBlockOffset);
-        Log.w("123", "【5、progressBlock】 currentOffset=[$currentBlockOffset]，totalLength=$totalLength , speed=${blockSpeed.speed()}")
+    override fun progressBlock(task: DownloadTask, blockIndex: Int, currentBlockOffset: Long, blockSpeed: SpeedCalculator) {
+//        val readableOffset = Util.humanReadableBytes(currentBlockOffset, true)
+//        val progressStatus = "$readableOffset/$readableTotalLength"
+//        val speed = blockSpeed.speed()
+//        val percent = currentBlockOffset.toFloat() / totalLength * 100
+//        //Log.i("123", "【5、progressBlock】" + blockIndex + "，" + currentBlockOffset);
+//
+//        Log.w("123", "【5、progressBlock】  ${task.id}  blockIndex={$blockIndex}  currentOffset=[$progressStatus]，" +
+//                "totalLength=$totalLength , speed=${speed}，进度：$percent%")
 
         val status = DownloadListener1Status.PROGRESS
         QueueTagUtils.saveStatus(task, status)
@@ -175,7 +223,7 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
         ProgressUtils.calcProgressToViewAndMark(
                 holder.getView(R.id.progressbar_down),
                 currentBlockOffset,
-                totalLength,
+                totalLengthMap.get(task.id),// totalLength
                 false
         )
 
@@ -183,14 +231,17 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
 
     override fun progress(task: DownloadTask, currentOffset: Long, taskSpeed: SpeedCalculator) {
         val readableOffset = Util.humanReadableBytes(currentOffset, true)
-        val progressStatus = "$readableOffset/$readableTotalLength"
+        val progressStatus = "$readableOffset/${readableTotalLengthMap.get(task.id)}"
         val speed = taskSpeed.speed()
-        val percent = currentOffset.toFloat() / totalLength * 100
+        val percent = currentOffset.toFloat() / totalLengthMap.get(task.id) * 100
+
+//        val readableOffset = Util.humanReadableBytes(currentOffset, true)
+//        val progressStatus = "$readableOffset/$readableTotalLength"
+//        val speed = taskSpeed.speed()
+//        val percent = currentOffset.toFloat() / totalLength * 100
 
         //eg: 【6、progress】13195049[13.2 MB/43.4 MB]，速度：667.4 kB/s，进度：30.385971%
-        // Log.i("123", "【6、progress】$currentOffset[$progressStatus]，速度：$speed，进度：$percent%")
-        Log.i("123", "【6、progress】$currentOffset[$progressStatus]，速度：$speed，进度：$percent%")
-
+        Log.i("123", "【6、progress】${task.id} ${readableOffset} $currentOffset[$progressStatus]，速度：$speed，进度：$percent%")
 
         val status = DownloadListener1Status.PROGRESS
         QueueTagUtils.saveStatus(task, status)
@@ -200,27 +251,45 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
 
         holder.setText(R.id.tv_down_status, status)
         holder.setText(R.id.bt_down_action, R.string.cancel)
-        holder.setText(R.id.tv_down_written_total, progressStatus)
-        holder.setText(R.id.tv_down_speed, speed)
-        holder.setText(R.id.tv_down_percent, "$percent%")
 
+        val tvTotal: TextView = holder.getView(R.id.tv_down_written_total)
+        val tvSpeed: TextView = holder.getView(R.id.tv_down_speed)
+        val tvPercent: TextView = holder.getView(R.id.tv_down_percent)
+        val flDelete: FrameLayout = holder.getView(R.id.fl_down_delete)
+
+        if (tvTotal.visibility == View.GONE) {
+            tvTotal.visibility = View.VISIBLE
+        }
+        if (tvSpeed.visibility == View.GONE) {
+            tvSpeed.visibility = View.VISIBLE
+        }
+        if (tvPercent.visibility == View.GONE) {
+            tvPercent.visibility = View.VISIBLE
+        }
+        if (flDelete.visibility == View.GONE) {
+            flDelete.visibility = View.VISIBLE
+        }
+
+
+        tvTotal.text = progressStatus;
+        tvSpeed.text = speed;
+        tvPercent.text = "$percent%";
 
         ProgressUtils.updateProgressToViewWithMark(holder.getView(R.id.progressbar_down), currentOffset, false)
 
     }
 
     override fun blockEnd(task: DownloadTask, blockIndex: Int, info: BlockInfo?, blockSpeed: SpeedCalculator) {
-        Log.i("123", "【7、blockEnd】$blockIndex")
+        //Log.i("123", "【7、blockEnd】$blockIndex")
     }
 
     override fun taskEnd(task: DownloadTask, cause: EndCause, realCause: Exception?, taskSpeed: SpeedCalculator) {
-        Log.i("123", "【8、taskEnd】" + cause.name + "：" + if (realCause != null) realCause.message else "无异常")
-
+        //Log.i("123", "【8、taskEnd】" + cause.name + "：" + if (realCause != null) realCause.message else "无异常")
 
         val status = cause.toString()
         QueueTagUtils.saveStatus(task, status)
 
-        Log.w(TAG, "${task.file?.absolutePath} end with: $cause ]---===---[  Exception : ${realCause?.message}")
+        //Log.w(TAG, "${task.file?.absolutePath} end with: $cause ]---===---[  Exception : ${realCause?.message}")
         val holder = holderMap.get(task.id) ?: return
 
         holder.setText(R.id.tv_down_status, status)
@@ -229,13 +298,13 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
         when {
             taskStatus == StatusUtil.Status.COMPLETED -> {
                 holder.setText(R.id.bt_down_action, R.string.delete)
-                val ivDelete: ImageView = holder.getView(R.id.iv_down_delete)
-                ivDelete.visibility = View.VISIBLE
+                val flDelete: FrameLayout = holder.getView(R.id.fl_down_delete)
+                flDelete.visibility = View.VISIBLE
             }
-            task.info?.totalOffset ?: -1 > 0L         -> {
+            task.info?.totalOffset ?: -1 > 0L -> {
                 holder.setText(R.id.bt_down_action, R.string.goon)
             }
-            else                                      -> {
+            else -> {
                 holder.setText(R.id.bt_down_action, R.string.start)
             }
         }
@@ -243,8 +312,8 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
         if (cause == EndCause.COMPLETED) {
             val progressBar: ProgressBar = holder.getView(R.id.progressbar_down)
             progressBar.progress = progressBar.max
-            val ivDelete: ImageView = holder.getView(R.id.iv_down_delete)
-            ivDelete.visibility = View.VISIBLE
+            val flDelete: FrameLayout = holder.getView(R.id.fl_down_delete)
+            flDelete.visibility = View.VISIBLE
         }
     }
 }

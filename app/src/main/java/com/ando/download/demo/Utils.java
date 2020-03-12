@@ -116,6 +116,7 @@ public class Utils {
         } else {
             itemInfo.status = 2; //修改状态
             if (cause == EndCause.CANCELED) {
+                Log.i("123", "【任务取消】");
                 Toast.makeText(context, "任务取消", Toast.LENGTH_SHORT).show();
             } else if (cause == EndCause.ERROR) {
                 Log.i("123", "【任务出错】");

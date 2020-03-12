@@ -80,4 +80,5 @@ public class MyDownloadListener4WithSpeed extends DownloadListener4WithSpeed {
         Log.i("123", "【8、taskEnd】" + cause.name() + "：" + (realCause != null ? realCause.getMessage() : "无异常"));
         Utils.dealEnd(context, itemInfo, cause);
     }
+
 }

@@ -3,11 +3,11 @@ package com.ando.download.queue.speed
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
+import android.view.FrameMetrics
 import android.view.View
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import com.ando.download.R
 import com.ando.download.config.TaskBean
 import com.ando.download.queue.DownloadFileHelper
@@ -23,13 +23,15 @@ import java.io.File
 
 class QueueController4WithSpeed {
 
-    private var adapter: BaseQuickAdapter<*, *>? = null
+    private var adapter: BaseQuickAdapter<DownloadTask, BaseViewHolder>? = null
     private val taskList = arrayListOf<DownloadTask>()
     private var context: DownloadContext? = null
     private val listener = QueueDownloadListener4WithSpeed()
     private var queueDir: File? = null
 
     private var urlList: List<TaskBean>? = null
+
+    private val STATUS_DELETE = "删除"
 
     fun getTaskList(): List<DownloadTask> {
         return taskList
@@ -84,7 +86,7 @@ class QueueController4WithSpeed {
             QueueTagUtils.clearProceedTask(task)
         }
 
-        Log.i("123", "delete $queueDir Success!")
+        Log.i("123", "deleteFiles $queueDir Success!")
     }
 
     fun deleteFile(holder: BaseViewHolder, task: DownloadTask) {
@@ -97,12 +99,11 @@ class QueueController4WithSpeed {
             return
         }
 
-        Log.e(TAG, "Task: $task")
+        Log.e(TAG, "deleteFile Task: $task")
 
         val children = queueDir?.list()
         if (children != null) {
             for (child in children) {
-
 
                 var realDeleteFile: File? = null
                 if (task.filename != null) {
@@ -110,7 +111,7 @@ class QueueController4WithSpeed {
                         realDeleteFile = task.file
                     }
                 } else {
-                    var fileName = task.url.substring(task.url.lastIndexOf('/') + 1);
+                    val fileName = task.url.substring(task.url.lastIndexOf('/') + 1);
 
                     if (TextUtils.equals(child, fileName)) {
                         realDeleteFile = File(task.parentFile, fileName)
@@ -136,8 +137,9 @@ class QueueController4WithSpeed {
                 QueueTagUtils.clearProceedTask(t)
             }
         }
+        taskList.remove(task)
 
-        Log.i("123", "delete ${task.filename} Success!")
+        Log.i("123", "deleteFile ${task.filename} Success!")
     }
 
 
@@ -156,8 +158,11 @@ class QueueController4WithSpeed {
     }
 
     fun start(isSerial: Boolean) {
-        //this.context?.start(listener, isSerial)
-        this.context?.startOnParallel(listener)
+        if (isSerial) {
+            this.context?.start(listener, true)
+        } else {
+            this.context?.startOnParallel(listener)
+        }
     }
 
     fun stop() {
@@ -168,28 +173,27 @@ class QueueController4WithSpeed {
 
     fun start(holder: BaseViewHolder, task: DownloadTask) {
 
-//        val task = taskList[position]
-        //Log.d(TAG, "bind  for " + task.url)
-
         //DownloadTask.Id 对应 ViewHolder
-        listener.bind(task, holder)
-        //ViewHolder 设置数据
-        listener.resetInfo(task, holder)
+        //listener.bind(task, holder)
 
+        //ViewHolder 设置数据
+        //listener.resetInfo(task, holder)
 
         val status = QueueTagUtils.getStatus(task)
+        Log.w(TAG, "Action...." + task.id + "  " + task.url + "   " + status)
+
         if (status == EndCause.COMPLETED.name || status == DownloadListener1Status.PROGRESS) {
-            Log.w(TAG, "暂停...." + task.url)
+            Log.w(TAG, "暂停....")
             task.cancel()
-        } else if (status == "删除") {
+        } else if (status == STATUS_DELETE) {
+            Log.w(TAG, "$STATUS_DELETE......")
+
             deleteFile(holder, task)
-            adapter?.notifyDataSetChanged()
+            adapter?.replaceData(taskList)
         } else {
-            Log.w(TAG, "继续...." + task.url)
-            //task.enqueue(QueueDownloadListener4WithSpeed())
+            Log.w(TAG, "继续....")
             task.enqueue(listener)
         }
-
 
 //        // priority
 //        val priority = TagUtil.getPriority(task)
@@ -206,10 +210,8 @@ class QueueController4WithSpeed {
 
     }
 
-    fun bind(adapter: BaseQuickAdapter<*, *>, holder: BaseViewHolder, task: DownloadTask) {
+    fun bind(adapter: BaseQuickAdapter<DownloadTask, BaseViewHolder>, holder: BaseViewHolder, task: DownloadTask) {
         this.adapter = adapter
-//        val task = taskList[position]
-        Log.d(TAG, "bind  for " + task.url)
 
         //DownloadTask.Id 对应 ViewHolder
         listener.bind(task, holder)
@@ -217,25 +219,30 @@ class QueueController4WithSpeed {
         listener.resetInfo(task, holder)
 
         //Holder View
-        val ivDelete: ImageView = holder.getView(R.id.iv_down_delete)
-        val itemAction: Button = holder.getView(R.id.bt_down_action)
-        val tvStatus: TextView = holder.getView(R.id.tv_down_status)
-        val progressBar: ProgressBar = holder.getView(R.id.progressbar_down)
+        val flDelete: FrameLayout = holder.getView(R.id.fl_down_delete)
+        val btnAction: Button = holder.getView(R.id.bt_down_action)
+        //val tvStatus: TextView = holder.getView(R.id.tv_down_status)
+        //val progressBar: ProgressBar = holder.getView(R.id.progressbar_down)
 
         // 开始
-        itemAction.setOnClickListener(object : View.OnClickListener {
+        btnAction.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                start(holder, task)
+
+                if (TextUtils.equals(btnAction.text, STATUS_DELETE)) {
+                    flDelete.performClick()
+                } else {
+                    start(holder, task)
+                }
             }
         })
 
         // 删除
-        ivDelete.setOnClickListener(object : View.OnClickListener {
+        flDelete.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
+                task.cancel()
+
                 deleteFile(holder, task)
-                if (this@QueueController4WithSpeed.adapter != null) {
-                    this@QueueController4WithSpeed.adapter!!.notifyDataSetChanged()
-                }
+                adapter.replaceData(taskList)
             }
         })
 
