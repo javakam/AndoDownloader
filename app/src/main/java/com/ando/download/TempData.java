@@ -17,6 +17,23 @@ import java.util.List;
  */
 public class TempData {
 
+    public static List<TaskBean> getTaskBeans2(String parentPath) {
+
+        List<TaskBean> list = new ArrayList<>();
+        TaskBean taskBean1 = new TaskBean("文件1",
+                "https://app-zqrb-oss.oss-cn-beijing.aliyuncs.com/serverData/discuss/2020-03-12/1583988347871.mp3"
+                , parentPath);
+        TaskBean taskBean2 = new TaskBean("文件2",
+                "https://app-zqrb-oss.oss-cn-beijing.aliyuncs.com/serverData/discuss/2020-03-12/1583988356686.png"
+                , parentPath);
+        TaskBean taskBean3 = new TaskBean("3. Alipay",
+                "https://t.alipayobjects.com/L1/71/100/and/alipay_wap_main.apk"
+                , parentPath);
+        list.add(taskBean1);
+        list.add(taskBean2);
+        list.add(taskBean3);
+        return list;
+    }
     public static List<TaskBean> getTaskBeans(String parentPath) {
 
         List<TaskBean> list = new ArrayList<>();

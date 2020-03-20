@@ -45,7 +45,8 @@ class QueueController4WithSpeed {
         this.urlList = urlList
 
         set.setParentPathFile(parentFile)
-        set.minIntervalMillisCallbackProcess = 300
+        set.minIntervalMillisCallbackProcess = 30 // the minimal interval millisecond for callback progress
+        set.isPassIfAlreadyCompleted = false //do re-download even if the task has already been completed in the past.
 
         val builder = set.commit()
 
