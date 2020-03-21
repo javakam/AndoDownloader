@@ -229,7 +229,7 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
 //        val progressStatus = "$readableOffset/$readableTotalLength"
 //        val speed = blockSpeed.speed()
 //        val percent = currentBlockOffset.toFloat() / totalLength * 100
-//        //Log.i("123", "【5、progressBlock】" + blockIndex + "，" + currentBlockOffset);
+        Log.i("123", "【5、progressBlock】$blockIndex，$currentBlockOffset");
 //
 //        Log.w("123", "【5、progressBlock】  ${task.id}  blockIndex={$blockIndex}  currentOffset=[$progressStatus]，" +
 //                "totalLength=$totalLength , speed=${speed}，进度：$percent%")
@@ -298,7 +298,7 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
     }
 
     override fun blockEnd(task: DownloadTask, blockIndex: Int, info: BlockInfo?, blockSpeed: SpeedCalculator) {
-        //Log.i("123", "【7、blockEnd】$blockIndex")
+        Log.i("123", "【7、blockEnd】$blockIndex")
     }
 
     override fun taskEnd(task: DownloadTask, cause: EndCause, realCause: Exception?, taskSpeed: SpeedCalculator) {
@@ -311,6 +311,8 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
 
         val status = cause.toString()
         QueueTagUtils.saveStatus(task, status)
+        //手动更新断点信息到数据库 , 解决小文件没有计入断点信息的问题
+        task.info?.let { OkDownload.with().breakpointStore().update(it) }
 
         //Log.w(TAG, "${task.file?.absolutePath} end with: $cause ]---===---[  Exception : ${realCause?.message}")
         val holder = holderMap.get(task.id) ?: return
