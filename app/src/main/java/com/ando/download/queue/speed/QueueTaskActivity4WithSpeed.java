@@ -11,9 +11,14 @@ import com.ando.download.TempData;
 import com.ando.download.demo.Utils;
 import com.liulishuo.okdownload.DownloadContext;
 import com.liulishuo.okdownload.DownloadContextListener;
+import com.liulishuo.okdownload.DownloadMonitor;
 import com.liulishuo.okdownload.DownloadTask;
 import com.liulishuo.okdownload.OkDownload;
+import com.liulishuo.okdownload.core.Util;
+import com.liulishuo.okdownload.core.breakpoint.BreakpointInfo;
 import com.liulishuo.okdownload.core.cause.EndCause;
+import com.liulishuo.okdownload.core.cause.ResumeFailedCause;
+import com.liulishuo.okdownload.core.dispatcher.DownloadDispatcher;
 
 import java.io.File;
 
@@ -21,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import retrofit2.http.HEAD;
 
 /**
  * Title: QueueTaskActivity4WithSpeed
@@ -62,6 +68,34 @@ public class QueueTaskActivity4WithSpeed extends AppCompatActivity {
     }
 
     private void initData() {
+        //全局配置
+        Util.enableConsoleLog();//okcat
+        DownloadDispatcher.setMaxParallelRunningCount(2);
+        OkDownload.with().setMonitor(new DownloadMonitor() {
+            @Override
+            public void taskStart(DownloadTask task) {
+            }
+
+            @Override
+            public void taskDownloadFromBreakpoint(@NonNull DownloadTask task, @NonNull BreakpointInfo info) {
+
+            }
+
+            @Override
+            public void taskDownloadFromBeginning(@NonNull DownloadTask task, @NonNull BreakpointInfo info, @Nullable ResumeFailedCause cause) {
+
+            }
+
+            @Override
+            public void taskEnd(DownloadTask task, EndCause cause, @Nullable Exception realCause) {
+
+            }
+        });
+
+        //RemitStoreOnSQLite.setRemitToDBDelayMillis(500);
+        //OkDownload.with().setMonitor(monitor);
+        //OkDownload.with().downloadDispatcher().cancelAll();
+        //OkDownload.with().breakpointStore().remove(taskId);
 
         //getTaskSmallBeans getTaskBeans
         mDownLoadView.setData(TempData.getTaskSmallBeans(Utils.PARENT_PATH2), new DownloadContextListener() {

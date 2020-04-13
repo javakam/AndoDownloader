@@ -27,7 +27,7 @@ import androidx.core.content.FileProvider;
 public class Utils {
 
     public static final String PARENT_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/aatest";
-    public static final String PARENT_PATH2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/manytest";
+    public static final String PARENT_PATH2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/point";
 
     public static void launchOrInstallApp(Context context, String pkgName) {
         if (!TextUtils.isEmpty(pkgName)) {

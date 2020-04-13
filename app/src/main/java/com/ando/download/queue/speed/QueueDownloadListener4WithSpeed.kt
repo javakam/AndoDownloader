@@ -1,15 +1,20 @@
 package com.ando.download.queue.speed
 
+import android.R.id
 import android.util.Log
 import android.util.SparseArray
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import com.ando.download.R
 import com.ando.download.queue.DownloadListener1Status
 import com.ando.download.queue.ProgressUtils
 import com.ando.download.queue.QueueTagUtils
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.liulishuo.okdownload.DownloadTask
+import com.liulishuo.okdownload.OkDownload
 import com.liulishuo.okdownload.SpeedCalculator
 import com.liulishuo.okdownload.StatusUtil
 import com.liulishuo.okdownload.core.Util
@@ -18,6 +23,7 @@ import com.liulishuo.okdownload.core.breakpoint.BreakpointInfo
 import com.liulishuo.okdownload.core.cause.EndCause
 import com.liulishuo.okdownload.core.listener.DownloadListener4WithSpeed
 import com.liulishuo.okdownload.core.listener.assist.Listener4SpeedAssistExtend.Listener4SpeedModel
+
 
 /**
  * Title: QueueDownloadListener4WithSpeed
@@ -68,7 +74,16 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
         // process references
         val status = QueueTagUtils.getStatus(task)
 
-        Log.i(TAG, "setProgress ${task.id}  $status")
+        Log.i(TAG, "setProgress ${task.id}  $status" +
+                " StatusUtil.getStatus=${StatusUtil.getStatus(task).name}  StatusUtil.isCompleted=${StatusUtil.isCompleted(task)}")
+
+        // Note: the info will be deleted since task is completed download for data health lifecycle
+        var info = OkDownload.with().breakpointStore()[task.id]
+//        info = StatusUtil.getCurrentInfo(url, parentPath, null)
+//        info = StatusUtil.getCurrentInfo(url, parentPath, filename)
+        //info = task.info
+        Log.w(TAG, "BreakpointStore ${task.id}  info=${info?.id}  ${info?.url}  ${info?.filename}")
+
 
         if (status != null) {
             //  started
@@ -214,7 +229,7 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
 //        val progressStatus = "$readableOffset/$readableTotalLength"
 //        val speed = blockSpeed.speed()
 //        val percent = currentBlockOffset.toFloat() / totalLength * 100
-//        //Log.i("123", "【5、progressBlock】" + blockIndex + "，" + currentBlockOffset);
+        Log.i("123", "【5、progressBlock】$blockIndex，$currentBlockOffset");
 //
 //        Log.w("123", "【5、progressBlock】  ${task.id}  blockIndex={$blockIndex}  currentOffset=[$progressStatus]，" +
 //                "totalLength=$totalLength , speed=${speed}，进度：$percent%")
@@ -283,7 +298,7 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
     }
 
     override fun blockEnd(task: DownloadTask, blockIndex: Int, info: BlockInfo?, blockSpeed: SpeedCalculator) {
-        //Log.i("123", "【7、blockEnd】$blockIndex")
+        Log.i("123", "【7、blockEnd】$blockIndex")
     }
 
     override fun taskEnd(task: DownloadTask, cause: EndCause, realCause: Exception?, taskSpeed: SpeedCalculator) {
@@ -296,6 +311,8 @@ class QueueDownloadListener4WithSpeed : DownloadListener4WithSpeed() {
 
         val status = cause.toString()
         QueueTagUtils.saveStatus(task, status)
+        //手动更新断点信息到数据库 , 解决小文件没有计入断点信息的问题
+        task.info?.let { OkDownload.with().breakpointStore().update(it) }
 
         //Log.w(TAG, "${task.file?.absolutePath} end with: $cause ]---===---[  Exception : ${realCause?.message}")
         val holder = holderMap.get(task.id) ?: return
