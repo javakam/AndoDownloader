@@ -21,7 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Title: QueueTaskActivity4WithSpeed
@@ -64,7 +63,8 @@ public class QueueTaskActivity4WithSpeed extends AppCompatActivity {
 
     private void initData() {
 
-        mDownLoadView.setData(TempData.getTaskBeans(Utils.PARENT_PATH2), new DownloadContextListener() {
+        //getTaskSmallBeans getTaskBeans
+        mDownLoadView.setData(TempData.getTaskSmallBeans(Utils.PARENT_PATH2), new DownloadContextListener() {
             @Override
             public void taskEnd(@NonNull DownloadContext context, @NonNull DownloadTask task, @NonNull EndCause cause, @Nullable Exception realCause, int remainCount) {
             }

@@ -1,7 +1,6 @@
 package com.ando.download;
 
 import com.ando.download.config.TaskBean;
-import com.ando.download.demo.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,27 @@ import java.util.List;
  */
 public class TempData {
 
+    public static List<TaskBean> getTaskSmallBeans(String parentPath) {
+        //h
+        //
+
+        List<TaskBean> list = new ArrayList<>();
+        TaskBean taskBean1 = new TaskBean("1. 1586418003226.JPG",
+                "https://app-zqrb-oss.oss-cn-beijing.aliyuncs.com/serverData/discuss/2020-04-09/1586418003226.JPG"
+                , parentPath);
+
+        TaskBean taskBean2 = new TaskBean("2. 1586267702304.jpg",
+                "https://app-zqrb-oss.oss-cn-beijing.aliyuncs.com/serverData/discuss/2020-04-07/1586267702304.jpg"
+                , parentPath);
+
+        TaskBean taskBean3 = new TaskBean("3. 1586094990499.mp3",
+                "https://app-zqrb-oss.oss-cn-beijing.aliyuncs.com/serverData/discuss/2020-04-05/1586094990499.mp3"
+                , parentPath);
+        list.add(taskBean1);
+        list.add(taskBean2);
+        list.add(taskBean3);
+        return list;
+    }
     public static List<TaskBean> getTaskBeans(String parentPath) {
 
         List<TaskBean> list = new ArrayList<>();
